@@ -1,6 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import newrelic from 'newrelic';
 import { SwaggerCustomOptions, SwaggerModule } from '@nestjs/swagger';
 import { swaggerConfig } from './config/swagger';
 import { DOCS_PATH } from './common/constans/routes';
