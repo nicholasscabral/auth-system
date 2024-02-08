@@ -1,10 +1,11 @@
 // logger/winston.logger.ts
-import { Injectable } from '@nestjs/common';
+import { Global, Injectable } from '@nestjs/common';
 import * as winston from 'winston';
 import * as DailyRotateFile from 'winston-daily-rotate-file';
 
+@Global()
 @Injectable()
-export class Logger {
+export class LoggerService {
   private logger: winston.Logger;
 
   constructor() {
