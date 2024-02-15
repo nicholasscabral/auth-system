@@ -8,6 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { config } from './config/config';
 import { EmailVerificationModule } from './email-verification/email-verification.module';
 import { UtilsServicesModule } from './utils-services/utils-services.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UtilsServicesModule } from './utils-services/utils-services.module';
     UsersModule,
     EmailVerificationModule,
     UtilsServicesModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -7,7 +7,16 @@ export const config: IConfig = {
   verifyEmailRedirectUrl: process.env.VERIFY_EMAIL_REDIRECT_URL,
   oauth: {
     google: {
-      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.GOOGLE_CALLBACK,
+      scope: ['email', 'profile'],
+    },
+    github: {
+      clientID: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      callbackURL: process.env.GITHUB_CALLBACK,
+      scope: ['user:email', 'emails:read'],
     },
   },
   mailer: {
