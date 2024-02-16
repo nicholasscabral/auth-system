@@ -18,6 +18,12 @@ export const config: IConfig = {
       callbackURL: process.env.GITHUB_CALLBACK,
       scope: ['user:email', 'emails:read'],
     },
+    microsoft: {
+      clientID: process.env.MICROSOFT_CLIENT_ID,
+      clientSecret: process.env.MICROSOFT_CLIENT_SECRET,
+      callbackURL: process.env.MICROSOFT_CALLBACK,
+      scope: ['user.read'],
+    },
   },
   mailer: {
     service: 'gmail',
@@ -26,8 +32,8 @@ export const config: IConfig = {
     secure: false,
     ignoreTLS: true,
     auth: {
-      user: process.env.MAIALER_USER,
-      pass: process.env.MAIALER_PASS,
+      user: process.env.MAILER_USER,
+      pass: process.env.MAILER_PASS,
     },
   },
 };

@@ -26,4 +26,14 @@ export class AuthController {
   async githubCallback(@Req() req: Request, @Res() res: Response) {
     return this.authService.githubLogin(req, res);
   }
+
+  @Get('microsoft')
+  @UseGuards(AuthGuard('microsoft'))
+  microsoftLogin(): void {}
+
+  @Get('microsoft/callback')
+  @UseGuards(AuthGuard('microsoft'))
+  async microsoftCallback(@Req() req: Request, @Res() res: Response) {
+    return this.authService.microsoftLogin(req, res);
+  }
 }

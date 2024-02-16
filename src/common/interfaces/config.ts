@@ -7,6 +7,7 @@ type OAuthStrategyOptions = {
 
 interface GoogleOAuthStrategyOptions extends OAuthStrategyOptions {}
 interface GithubOAuthStrategyOptions extends OAuthStrategyOptions {}
+interface MicrosoftOAuthStrategyOptions extends OAuthStrategyOptions {}
 
 export interface IConfig {
   env: string;
@@ -16,6 +17,7 @@ export interface IConfig {
   oauth: {
     google: GoogleOAuthStrategyOptions;
     github: GithubOAuthStrategyOptions;
+    microsoft: MicrosoftOAuthStrategyOptions;
   };
   mailer: {
     service: string;
