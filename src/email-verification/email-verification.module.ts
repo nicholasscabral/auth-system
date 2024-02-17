@@ -12,7 +12,7 @@ import { PrismaService } from 'src/providers/database/prisma.service';
     }),
   ],
   providers: [EmailVerificationService, PrismaService],
-  exports: [EmailVerificationService],
   controllers: [EmailVerificationController],
+  exports: [EmailVerificationService],
 })
 export class EmailVerificationModule {}

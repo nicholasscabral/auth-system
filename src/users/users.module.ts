@@ -9,5 +9,6 @@ import { EmailVerificationService } from 'src/email-verification/email-verificat
   imports: [EmailVerificationModule],
   controllers: [UsersController],
   providers: [UsersService, PrismaService, EmailVerificationService],
+  exports: [UsersService, PrismaService, EmailVerificationService],
 })
 export class UsersModule {}

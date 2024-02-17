@@ -1,13 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create.dto';
 import { PrismaService } from 'src/providers/database/prisma.service';
-import * as bcrypt from 'bcrypt';
 import { EmailVerificationService } from 'src/email-verification/email-verification.service';
+import { PasswordService } from 'src/utils-services/password.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     private readonly prisma: PrismaService,
+    private readonly passwordService: PasswordService,
     private readonly emailVerificationService: EmailVerificationService,
   ) {}
 
@@ -20,8 +21,7 @@ export class UsersService {
       throw new BadRequestException({ error: 'Email already in use' });
     }
 
-    const salt = await bcrypt.genSalt();
-    const hash = await bcrypt.hash(password + salt, 10);
+    const { hash, salt } = await this.passwordService.hashPassword(password);
 
     const user = await this.prisma.tB_USERS.create({
       data: { email: email, hash, salt },
