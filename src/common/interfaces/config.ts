@@ -10,6 +10,7 @@ interface GithubOAuthStrategyOptions extends OAuthStrategyOptions {}
 interface MicrosoftOAuthStrategyOptions extends OAuthStrategyOptions {}
 
 export interface IConfig {
+  clientUrl: string;
   env: string;
   databaseUrl: string;
   jwtSecret: string;

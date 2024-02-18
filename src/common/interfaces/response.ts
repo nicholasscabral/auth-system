@@ -1,4 +1,5 @@
-export type ServiceResponse = void | {
+export interface ServiceResponse {
+  success?: boolean;
   message?: string;
   error?: string;
-};
+}

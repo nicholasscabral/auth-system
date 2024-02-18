@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { TokenService } from '../utils-services/token.service';
 import { config } from 'src/config/config';
 import { MailerService } from '@nestjs-modules/mailer';
@@ -26,18 +22,18 @@ export class EmailVerificationService {
     ) as VerifyEmailToken;
 
     if (!decodedToken) {
-      throw new UnauthorizedException('Token is expired');
+      return { success: false, message: 'Link is expired' };
     }
 
     const email: string = decodedToken.email;
     const user = await this.prisma.tB_USERS.findUnique({ where: { email } });
 
     if (!user) {
-      throw new NotFoundException();
+      return { success: false };
     }
 
     if (user.email_verified) {
-      return { message: 'This account is already verified, please login' };
+      return { success: true, message: 'This account is already verified' };
     }
 
     await this.prisma.tB_USERS.update({
@@ -46,11 +42,19 @@ export class EmailVerificationService {
     });
 
     this.sendAccountVerifiedEmail(email);
+
+    return { success: true };
   }
 
   async resendVerificationLink(token: string): Promise<void> {
-    const { email }: VerifyEmailToken = this.tokenService.decode(token);
-    this.sendVerificationLink(email);
+    const decodedToken: VerifyEmailToken = this.tokenService.verifyToken(
+      token,
+      true,
+    );
+    if (!decodedToken) {
+      throw new ForbiddenException('Invalid token');
+    }
+    this.sendVerificationLink(decodedToken.email);
   }
 
   async sendVerificationLink(email: string): Promise<void> {
@@ -60,7 +64,7 @@ export class EmailVerificationService {
       .sendMail({
         to: email,
         subject: 'Verify your account',
-        html: `<p>Please verify your email to access your account</p> <a href="${confirmationLink}" target="_blank">Activate account</a>`,
+        html: `<p>Please verify your email to access your account</p> <a href="${confirmationLink}" target="_blank">Activate account</a> <p>This link will be valid for the next 24 hours</p>`,
       })
       .then(() => this.logger.log(`Confirmation email sent to ${email}`))
       .catch((e) =>

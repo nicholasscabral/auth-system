@@ -1,8 +1,18 @@
-import { Controller, Get, Post, Query, ValidationPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Query,
+  Res,
+  ValidationPipe,
+} from '@nestjs/common';
 import { EMAIL_VERIFICATION_PATH } from 'src/common/constans/routes';
 import { VerifyEmailDto } from './dtos/verify';
 import { EmailVerificationService } from './email-verification.service';
 import { ResendEmailDto } from './dtos/resend';
+import { Response } from 'express';
+import { ServiceResponse } from 'src/common/interfaces/response';
+import { config } from 'src/config/config';
 
 @Controller(EMAIL_VERIFICATION_PATH)
 export class EmailVerificationController {
@@ -13,8 +23,20 @@ export class EmailVerificationController {
   @Get('verify')
   async verify(
     @Query(new ValidationPipe()) { token }: VerifyEmailDto,
+    @Res() res: Response,
   ): Promise<any> {
-    return this.emailVerificationService.verifyEmail(token);
+    const emailVerified: ServiceResponse =
+      await this.emailVerificationService.verifyEmail(token);
+
+    console.log(emailVerified);
+
+    const queryParams = !!emailVerified.success
+      ? emailVerified.message
+        ? `?message=${emailVerified.message}`
+        : ''
+      : `?error=true&message=${emailVerified.message}&token=${token}`;
+
+    return res.redirect(`${config.clientUrl}/email-verification${queryParams}`);
   }
 
   @Post('resend')
