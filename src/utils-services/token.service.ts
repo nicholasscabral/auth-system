@@ -8,7 +8,7 @@ import { ITokenService } from './interfaces';
 export class TokenService implements ITokenService {
   constructor(private readonly jwtService: JwtService) {}
 
-  generateToken(payload: any, expiresIn: '1d' | '2h'): string {
+  generateToken(payload: any, expiresIn: '1d' | '2h' | '7d'): string {
     return this.jwtService.sign(payload, {
       expiresIn,
       secret: config.jwtSecret,

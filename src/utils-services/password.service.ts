@@ -18,8 +18,6 @@ export class PasswordService implements IPasswordService {
     salt: string,
   ): Promise<boolean> {
     if (!password || !hashsedPassword || !salt) return false;
-    const comparationHash = await bcrypt.hash(password + salt, 10);
-    console.log(comparationHash, hashsedPassword);
-    return comparationHash === hashsedPassword;
+    return bcrypt.compare(password + salt, hashsedPassword);
   }
 }

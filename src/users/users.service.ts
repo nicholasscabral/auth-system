@@ -13,7 +13,7 @@ export class UsersService {
   ) {}
 
   async create({ email, password }: CreateUserDto) {
-    const userAlreadyExists = await this.prisma.tB_USERS.findUnique({
+    const userAlreadyExists = await this.prisma.users.findUnique({
       where: { email },
     });
 
@@ -23,7 +23,7 @@ export class UsersService {
 
     const { hash, salt } = await this.passwordService.hashPassword(password);
 
-    const user = await this.prisma.tB_USERS.create({
+    const user = await this.prisma.users.create({
       data: { email: email, hash, salt },
     });
 
@@ -31,6 +31,6 @@ export class UsersService {
   }
 
   async findByEmail(email: string): Promise<any> {
-    return this.prisma.tB_USERS.findUnique({ where: { email } });
+    return this.prisma.users.findUnique({ where: { email } });
   }
 }

@@ -8,6 +8,7 @@ import { MicrosoftOAuthStrategy } from './strategies/microsoft.strategy';
 import { UsersModule } from 'src/users/users.module';
 import { PasswordService } from 'src/utils-services/password.service';
 import { UsersService } from 'src/users/users.service';
+import { LocalStrategy } from './strategies/local.strategy';
 
 @Module({
   imports: [PassportModule, UsersModule],
@@ -17,6 +18,7 @@ import { UsersService } from 'src/users/users.service';
     GithubOAuthStrategy,
     GoogleOauthStrategy,
     MicrosoftOAuthStrategy,
+    LocalStrategy,
     PasswordService,
     UsersService,
   ],

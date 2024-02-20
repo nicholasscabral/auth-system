@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, Profile } from 'passport-github';
+import { GithubOAuthUser } from 'src/common/interfaces/oauth-user';
+import { getGithubPublicEmail } from 'src/common/utils/get-github-email';
 import { config } from 'src/config/config';
 
 @Injectable()
@@ -9,15 +11,16 @@ export class GithubOAuthStrategy extends PassportStrategy(Strategy, 'github') {
     super(config.oauth.github);
   }
 
-  validate(
+  async validate(
     accessToken: string,
     refreshToken: string,
     profile: Profile,
     done: any,
-  ): any {
-    const user = {
-      name: profile.name,
-      accessToken: accessToken,
+  ): Promise<any> {
+    const user: GithubOAuthUser = {
+      name: profile.displayName,
+      email: await getGithubPublicEmail(accessToken),
+      accessToken,
     };
     done(null, user);
   }

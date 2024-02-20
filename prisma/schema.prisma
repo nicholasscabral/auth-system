@@ -10,16 +10,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model TB_USERS {
-  id             Int           @id @unique @default(autoincrement())
-  email          String        @unique
-  hash           String
-  salt           String
-  role           TB_USERS_role @default(user)
-  email_verified Boolean       @default(false)
+model Users {
+  id       Int        @id @unique @default(autoincrement())
+  email    String     @unique
+  hash     String?
+  salt     String?
+  role     Users_role @default(user)
+  verified Boolean    @default(false)
+
+  @@map("users")
 }
 
-enum TB_USERS_role {
+enum Users_role {
   admin
   user
 }
