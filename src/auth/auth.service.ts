@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Request, Response } from 'express';
 import { User } from 'src/common/entities';
 import {
   GithubOAuthUser,
@@ -11,6 +10,7 @@ import { UsersService } from 'src/users/users.service';
 import { PasswordService } from 'src/utils-services/password.service';
 import { TokenService } from 'src/utils-services/token.service';
 import { LoginResponseDto } from './dtos/login-response';
+import { TokenExpiryByType } from 'src/common/enums';
 
 @Injectable()
 export class AuthService {
@@ -22,38 +22,26 @@ export class AuthService {
 
   async login(user: LoggedUser): Promise<LoginResponseDto> {
     return {
-      accessToken: this.tokenService.generateToken({ email: user.email }, '7d'),
+      accessToken: this.tokenService.generateToken(
+        { email: user.email },
+        TokenExpiryByType.accessToken,
+      ),
     };
   }
 
-  async googleLogin(req: Request, res: Response) {
-    const user: GoogleOAuthUser = req.user as GoogleOAuthUser;
-
-    console.log('google', { user });
-
-    res.redirect(
-      `http://localhost:3000/oauth-callback/google?email=${user.email}`,
-    );
+  async googleLogin(user: GoogleOAuthUser) {
+    const userFromOauth: User = await this.userService.upsertOAuthUser(user);
+    return this.login(userFromOauth);
   }
 
-  async githubLogin(req: Request, res: Response) {
-    const user: GithubOAuthUser = req.user as GithubOAuthUser;
-
-    console.log('github', { user });
-
-    res.redirect(
-      `http://localhost:3000/oauth-callback/github?email=${user.email}`,
-    );
+  async githubLogin(user: GithubOAuthUser) {
+    const userFromOauth: User = await this.userService.upsertOAuthUser(user);
+    return this.login(userFromOauth);
   }
 
-  async microsoftLogin(req: Request, res: Response) {
-    const user: MicrosoftOAuthUser = req.user as MicrosoftOAuthUser;
-
-    console.log('microsoft', { user });
-
-    res.redirect(
-      `http://localhost:3000/oauth-callback/microsoft?email=${user.email}`,
-    );
+  async microsoftLogin(user: MicrosoftOAuthUser) {
+    const userFromOauth: User = await this.userService.upsertOAuthUser(user);
+    return this.login(userFromOauth);
   }
 
   async validateUserLocal(email: string, password: string): Promise<User> {
@@ -66,8 +54,6 @@ export class AuthService {
       user.hash,
       user.salt,
     );
-
-    // return error if the user is not verified
 
     if (!passwordsMatch) return null;
 

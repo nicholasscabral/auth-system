@@ -15,11 +15,12 @@ export class MicrosoftOAuthStrategy extends PassportStrategy(
 
   validate(accessToken: string, refreshToken: string, profile: any, done: any) {
     const user: MicrosoftOAuthUser = {
+      sub: profile.id,
       name: profile.displayName,
       email: profile.emails[0].value,
-      sub: profile.id,
       accessToken,
     };
+    console.log('microsoft', { user });
     done(null, user);
   }
 }

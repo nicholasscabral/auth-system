@@ -11,14 +11,29 @@ datasource db {
 }
 
 model Users {
-  id       Int        @id @unique @default(autoincrement())
-  email    String     @unique
-  hash     String?
-  salt     String?
-  role     Users_role @default(user)
-  verified Boolean    @default(false)
+  id            Int             @id @unique @default(autoincrement())
+  email         String          @unique
+  name          String?
+  hash          String?
+  salt          String?
+  role          Users_role      @default(user)
+  verified      Boolean         @default(false)
+  createdAt     DateTime        @default(now()) @db.DateTime(0)
+  updatedAt     DateTime        @updatedAt
+  RefreshTokens RefreshTokens[]
 
   @@map("users")
+}
+
+model RefreshTokens {
+  id        Int      @id @unique @default(autoincrement())
+  token     String   @db.Text
+  userId    Int
+  expiresAt DateTime @db.Timestamp()
+  createdAt DateTime @default(now()) @db.DateTime(0)
+  user      Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
 }
 
 enum Users_role {

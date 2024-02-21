@@ -6,6 +6,7 @@ import { LoggerService } from 'src/utils-services/logger.service';
 import { PrismaService } from 'src/providers/database/prisma.service';
 import { VerifyEmailToken } from 'src/common/interfaces/verify-email-token';
 import { ServiceResponse } from 'src/common/interfaces/response';
+import { TokenExpiryByType } from 'src/common/enums';
 
 @Injectable()
 export class EmailVerificationService {
@@ -26,19 +27,19 @@ export class EmailVerificationService {
     }
 
     const email: string = decodedToken.email;
-    const user = await this.prisma.tB_USERS.findUnique({ where: { email } });
+    const user = await this.prisma.users.findUnique({ where: { email } });
 
     if (!user) {
       return { success: false };
     }
 
-    if (user.email_verified) {
+    if (user.verified) {
       return { success: true, message: 'This account is already verified' };
     }
 
-    await this.prisma.tB_USERS.update({
+    await this.prisma.users.update({
       where: { email },
-      data: { email_verified: true },
+      data: { verified: true },
     });
 
     this.sendAccountVerifiedEmail(email);
@@ -58,7 +59,10 @@ export class EmailVerificationService {
   }
 
   async sendVerificationLink(email: string): Promise<void> {
-    const token: string = this.tokenService.generateToken({ email }, '1d');
+    const token: string = this.tokenService.generateToken(
+      { email },
+      TokenExpiryByType.verificationEmail,
+    );
     const confirmationLink: string = `${config.verifyEmailRedirectUrl}?token=${token}`;
     this.mailer
       .sendMail({

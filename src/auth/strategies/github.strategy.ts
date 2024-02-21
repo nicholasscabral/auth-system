@@ -18,10 +18,12 @@ export class GithubOAuthStrategy extends PassportStrategy(Strategy, 'github') {
     done: any,
   ): Promise<any> {
     const user: GithubOAuthUser = {
+      sub: profile.id,
       name: profile.displayName,
       email: await getGithubPublicEmail(accessToken),
       accessToken,
     };
+    console.log('github', { user });
     done(null, user);
   }
 }

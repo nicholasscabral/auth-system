@@ -3,12 +3,13 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { config } from 'src/config/config';
 import { ITokenService } from './interfaces';
+import { TokenExpiryByType } from 'src/common/enums';
 
 @Injectable()
 export class TokenService implements ITokenService {
   constructor(private readonly jwtService: JwtService) {}
 
-  generateToken(payload: any, expiresIn: '1d' | '2h' | '7d'): string {
+  generateToken(payload: any, expiresIn: TokenExpiryByType): string {
     return this.jwtService.sign(payload, {
       expiresIn,
       secret: config.jwtSecret,

@@ -3,6 +3,8 @@ import { CreateUserDto } from './dto/create.dto';
 import { PrismaService } from 'src/providers/database/prisma.service';
 import { EmailVerificationService } from 'src/email-verification/email-verification.service';
 import { PasswordService } from 'src/utils-services/password.service';
+import { OAuthUser } from 'src/common/interfaces/oauth-user';
+import { User } from 'src/common/entities';
 
 @Injectable()
 export class UsersService {
@@ -32,5 +34,16 @@ export class UsersService {
 
   async findByEmail(email: string): Promise<any> {
     return this.prisma.users.findUnique({ where: { email } });
+  }
+
+  async upsertOAuthUser({ email }: OAuthUser): Promise<User> {
+    const userAlreadyExists: User = (await this.prisma.users.findUnique({
+      where: { email },
+    })) as User;
+
+    // TODO; enviar um email para definir senha
+
+    return (userAlreadyExists ||
+      this.prisma.users.create({ data: { email } })) as User;
   }
 }

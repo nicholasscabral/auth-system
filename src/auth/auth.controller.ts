@@ -1,11 +1,16 @@
-import { Controller, Get, Req, Res, UseGuards, Post } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { LocalAuthGuard } from './guards/local.guard';
 import { GoogleAuthGuard } from './guards/google.guard';
 import { GithubAuthGuard } from './guards/github.guard';
 import { MicrosoftAuthGuard } from './guards/microsoft.guard';
-import { LoggedUser } from 'src/common/interfaces/oauth-user';
+import {
+  GithubOAuthUser,
+  GoogleOAuthUser,
+  LoggedUser,
+  MicrosoftOAuthUser,
+} from 'src/common/interfaces/oauth-user';
 
 @Controller('auth')
 export class AuthController {
@@ -24,8 +29,8 @@ export class AuthController {
 
   @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
-  async googleCallback(@Req() req: Request, @Res() res: Response) {
-    return this.authService.googleLogin(req, res);
+  async googleCallback(@Req() req: Request) {
+    return this.authService.googleLogin(req.user as GoogleOAuthUser);
   }
 
   @Get('github')
@@ -34,8 +39,8 @@ export class AuthController {
 
   @Get('github/callback')
   @UseGuards(GithubAuthGuard)
-  async githubCallback(@Req() req: Request, @Res() res: Response) {
-    return this.authService.githubLogin(req, res);
+  async githubCallback(@Req() req: Request) {
+    return this.authService.githubLogin(req.user as GithubOAuthUser);
   }
 
   @Get('microsoft')
@@ -44,7 +49,7 @@ export class AuthController {
 
   @Get('microsoft/callback')
   @UseGuards(MicrosoftAuthGuard)
-  async microsoftCallback(@Req() req: Request, @Res() res: Response) {
-    return this.authService.microsoftLogin(req, res);
+  async microsoftCallback(@Req() req: Request) {
+    return this.authService.microsoftLogin(req.user as MicrosoftOAuthUser);
   }
 }

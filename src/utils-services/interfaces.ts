@@ -1,4 +1,5 @@
 import { LoggerService as NestLoggerService } from '@nestjs/common';
+import { TokenExpiryByType } from 'src/common/enums';
 export abstract class IPasswordService {
   abstract hashPassword(
     password: string,
@@ -12,7 +13,7 @@ export abstract class IPasswordService {
 }
 
 export abstract class ITokenService {
-  abstract generateToken(payload: any, expiresIn: '1d' | '2h'): string;
+  abstract generateToken(payload: any, expiresIn: TokenExpiryByType): string;
   abstract decode(token: string): any;
   abstract verifyToken(token: string): any;
 }
