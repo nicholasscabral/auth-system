@@ -60,6 +60,7 @@ export class EmailVerificationService {
   async sendVerificationLink(email: string): Promise<void> {
     const token: string = this.tokenService.generateVerificationEmailToken({
       email,
+      sub: 1,
     });
     const confirmationLink: string = `${config.verifyEmailRedirectUrl}?token=${token}`;
     this.mailer

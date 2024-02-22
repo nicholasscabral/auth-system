@@ -19,7 +19,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
     if (!user) throw new UnauthorizedException();
 
-    if (user.verified)
+    if (!user.verified)
       throw new UnauthorizedException(
         'Please verify your account before trying to login',
       );

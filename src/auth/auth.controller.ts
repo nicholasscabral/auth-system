@@ -8,9 +8,11 @@ import { MicrosoftAuthGuard } from './guards/microsoft.guard';
 import {
   GithubOAuthUser,
   GoogleOAuthUser,
-  LoggedUser,
   MicrosoftOAuthUser,
 } from 'src/common/interfaces/oauth-user';
+import { User } from 'src/common/entities';
+import { TokenPayload } from 'src/common/interfaces/token';
+import { RefreshTokenGuard } from './guards/refresh-token.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -19,8 +21,7 @@ export class AuthController {
   @Post('login')
   @UseGuards(LocalAuthGuard)
   async localLogin(@Req() req: Request) {
-    const user: LoggedUser = req.user as LoggedUser;
-    return this.authService.login(user);
+    return this.authService.login(req.user as User);
   }
 
   @Get('google')
@@ -51,5 +52,11 @@ export class AuthController {
   @UseGuards(MicrosoftAuthGuard)
   async microsoftCallback(@Req() req: Request) {
     return this.authService.microsoftLogin(req.user as MicrosoftOAuthUser);
+  }
+
+  @Post('refresh')
+  @UseGuards(RefreshTokenGuard)
+  async refreshToken(@Req() req: Request) {
+    return this.authService.refresh(req.user as TokenPayload);
   }
 }

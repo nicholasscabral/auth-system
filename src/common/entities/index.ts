@@ -11,4 +11,16 @@ export interface User {
   salt?: string;
   role: UserRole;
   verified: boolean;
+  createdAt: string | Date;
+  updatedAt: string | Date;
+  refreshTokens?: RefreshToken[];
+}
+
+export interface RefreshToken {
+  id: number;
+  user: User;
+  userId: number;
+  token: string;
+  expiresAt: string | Date;
+  createdAt: string | Date;
 }

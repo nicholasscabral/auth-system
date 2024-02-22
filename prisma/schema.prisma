@@ -28,7 +28,7 @@ model Users {
 model RefreshTokens {
   id        Int      @id @unique @default(autoincrement())
   token     String   @db.Text
-  userId    Int
+  userId    Int      @unique
   expiresAt DateTime @db.Timestamp()
   createdAt DateTime @default(now()) @db.DateTime(0)
   user      Users    @relation(fields: [userId], references: [id], onDelete: Cascade)

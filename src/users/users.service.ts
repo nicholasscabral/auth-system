@@ -14,7 +14,7 @@ export class UsersService {
     private readonly emailVerificationService: EmailVerificationService,
   ) {}
 
-  async create({ email, password }: CreateUserDto) {
+  async create({ email, password }: CreateUserDto): Promise<void> {
     const userAlreadyExists = await this.prisma.users.findUnique({
       where: { email },
     });

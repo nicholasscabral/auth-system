@@ -5,7 +5,9 @@ import { config } from 'src/config/config';
 import { ITokenService } from './interfaces';
 import { TokenExpiryByType } from 'src/common/enums';
 import { PrismaService } from 'src/providers/database/prisma.service';
-
+import { TokenPayload } from 'src/common/interfaces/token';
+import * as dayjs from 'dayjs';
+import { RefreshToken } from 'src/common/entities';
 @Injectable()
 export class TokenService extends ITokenService {
   constructor(
@@ -15,19 +17,22 @@ export class TokenService extends ITokenService {
     super();
   }
 
-  generateAccessToken(payload: { email: string }): string {
+  generateAccessToken(payload: TokenPayload): string {
     return this.generateToken(payload, TokenExpiryByType.ACCESS_TOKEN);
   }
 
-  generateRefreshToken(payload: { email: string }): string {
+  generateRefreshToken(payload: TokenPayload): string {
     return this.generateToken(payload, TokenExpiryByType.REFRESH_TOKEN);
   }
 
-  generateVerificationEmailToken(payload: { email: string }): string {
+  generateVerificationEmailToken(payload: TokenPayload): string {
     return this.generateToken(payload, TokenExpiryByType.VERIFICATION_EMAIL);
   }
 
-  protected generateToken(payload: any, expiresIn: TokenExpiryByType): string {
+  protected generateToken(
+    payload: TokenPayload,
+    expiresIn: TokenExpiryByType,
+  ): string {
     return this.jwtService.sign(payload, {
       expiresIn,
       secret: config.jwtSecret,
@@ -50,5 +55,31 @@ export class TokenService extends ITokenService {
     } catch (e) {
       return null;
     }
+  }
+
+  async upsertRefreshToken(token: string, userId: number): Promise<any> {
+    const upsert = {
+      token,
+      userId,
+      expiresAt: dayjs().add(7, 'day').toISOString(),
+    };
+    await this.prisma.refreshTokens.upsert({
+      create: upsert,
+      update: upsert,
+      where: { userId },
+    });
+  }
+
+  async validateRefreshToken(token: string): Promise<boolean> {
+    const refreshToken: RefreshToken =
+      (await this.prisma.refreshTokens.findFirst({
+        where: { token },
+      })) as RefreshToken;
+
+    if (!refreshToken) return false;
+
+    const isValid: TokenPayload = this.verifyToken(refreshToken.token);
+
+    return !!isValid;
   }
 }

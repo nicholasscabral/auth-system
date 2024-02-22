@@ -9,12 +9,16 @@ import { UsersModule } from 'src/users/users.module';
 import { PasswordService } from 'src/utils-services/password.service';
 import { UsersService } from 'src/users/users.service';
 import { LocalStrategy } from './strategies/local.strategy';
+import { AccessTokenStrategy } from './strategies/access-token.strategy';
+import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
 
 @Module({
   imports: [PassportModule, UsersModule],
   controllers: [AuthController],
   providers: [
     AuthService,
+    AccessTokenStrategy,
+    RefreshTokenStrategy,
     GithubOAuthStrategy,
     GoogleOauthStrategy,
     MicrosoftOAuthStrategy,
