@@ -6,7 +6,6 @@ import { LoggerService } from 'src/utils-services/logger.service';
 import { PrismaService } from 'src/providers/database/prisma.service';
 import { VerifyEmailToken } from 'src/common/interfaces/verify-email-token';
 import { ServiceResponse } from 'src/common/interfaces/response';
-import { TokenExpiryByType } from 'src/common/enums';
 
 @Injectable()
 export class EmailVerificationService {
@@ -59,10 +58,9 @@ export class EmailVerificationService {
   }
 
   async sendVerificationLink(email: string): Promise<void> {
-    const token: string = this.tokenService.generateToken(
-      { email },
-      TokenExpiryByType.verificationEmail,
-    );
+    const token: string = this.tokenService.generateVerificationEmailToken({
+      email,
+    });
     const confirmationLink: string = `${config.verifyEmailRedirectUrl}?token=${token}`;
     this.mailer
       .sendMail({

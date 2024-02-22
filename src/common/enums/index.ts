@@ -1,6 +1,6 @@
 export enum TokenExpiryByType {
-  accessToken = '10m',
-  refreshToken = '7d',
-  verificationEmail = '1d',
-  resetPasswordEmail = '3h',
+  ACCESS_TOKEN = '10m',
+  REFRESH_TOKEN = '7d',
+  VERIFICATION_EMAIL = '1d',
+  RESET_PASSWORD_EMAIL = '3h',
 }

@@ -4,12 +4,30 @@ import { JwtService } from '@nestjs/jwt';
 import { config } from 'src/config/config';
 import { ITokenService } from './interfaces';
 import { TokenExpiryByType } from 'src/common/enums';
+import { PrismaService } from 'src/providers/database/prisma.service';
 
 @Injectable()
-export class TokenService implements ITokenService {
-  constructor(private readonly jwtService: JwtService) {}
+export class TokenService extends ITokenService {
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly prisma: PrismaService,
+  ) {
+    super();
+  }
 
-  generateToken(payload: any, expiresIn: TokenExpiryByType): string {
+  generateAccessToken(payload: { email: string }): string {
+    return this.generateToken(payload, TokenExpiryByType.ACCESS_TOKEN);
+  }
+
+  generateRefreshToken(payload: { email: string }): string {
+    return this.generateToken(payload, TokenExpiryByType.REFRESH_TOKEN);
+  }
+
+  generateVerificationEmailToken(payload: { email: string }): string {
+    return this.generateToken(payload, TokenExpiryByType.VERIFICATION_EMAIL);
+  }
+
+  protected generateToken(payload: any, expiresIn: TokenExpiryByType): string {
     return this.jwtService.sign(payload, {
       expiresIn,
       secret: config.jwtSecret,
@@ -17,7 +35,7 @@ export class TokenService implements ITokenService {
   }
 
   decode(token: string): any {
-    return this.jwtService.decode(token, { json: true });
+    return this.jwtService.decode(token);
   }
 
   verifyToken(token: string, ignoreExpiration?: boolean): any {

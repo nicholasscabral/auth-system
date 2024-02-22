@@ -13,7 +13,13 @@ export abstract class IPasswordService {
 }
 
 export abstract class ITokenService {
-  abstract generateToken(payload: any, expiresIn: TokenExpiryByType): string;
+  abstract generateAccessToken(payload: { email: string }): string;
+  abstract generateRefreshToken(payload: { email: string }): string;
+  abstract generateVerificationEmailToken(payload: { email: string }): string;
+  protected abstract generateToken(
+    payload: any,
+    expiresIn: TokenExpiryByType,
+  ): string;
   abstract decode(token: string): any;
   abstract verifyToken(token: string): any;
 }
