@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,16 +8,17 @@ datasource db {
 }
 
 model Users {
-  id            Int             @id @unique @default(autoincrement())
-  email         String          @unique
-  name          String?
-  hash          String?
-  salt          String?
-  role          Users_role      @default(user)
-  verified      Boolean         @default(false)
-  createdAt     DateTime        @default(now()) @db.DateTime(0)
-  updatedAt     DateTime        @updatedAt
-  RefreshTokens RefreshTokens[]
+  id                  Int                   @id @unique @default(autoincrement())
+  email               String                @unique
+  name                String?
+  hash                String?
+  salt                String?
+  role                Users_role            @default(user)
+  verified            Boolean               @default(false)
+  createdAt           DateTime              @default(now()) @db.DateTime(0)
+  updatedAt           DateTime              @updatedAt
+  RefreshTokens       RefreshTokens[]
+  ResetPasswordTokens ResetPasswordTokens[]
 
   @@map("users")
 }
@@ -29,11 +27,22 @@ model RefreshTokens {
   id        Int      @id @unique @default(autoincrement())
   token     String   @db.Text
   userId    Int      @unique
-  expiresAt DateTime @db.Timestamp()
+  expiresAt DateTime @db.DateTime(0)
   createdAt DateTime @default(now()) @db.DateTime(0)
   user      Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("refresh_tokens")
+}
+
+model ResetPasswordTokens {
+  id        Int      @id @unique @default(autoincrement())
+  token     String   @db.Text
+  userId    Int      @unique
+  expiresAt DateTime @db.DateTime(0)
+  createdAt DateTime @default(now()) @db.DateTime(0)
+  user      Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("reset_password_tokens")
 }
 
 enum Users_role {

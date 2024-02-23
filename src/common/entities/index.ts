@@ -24,3 +24,12 @@ export interface RefreshToken {
   expiresAt: string | Date;
   createdAt: string | Date;
 }
+
+export interface ResetPasswordToken {
+  id: number;
+  user: User;
+  userId: number;
+  token: string;
+  expiresAt: string | Date;
+  createdAt: string | Date;
+}
