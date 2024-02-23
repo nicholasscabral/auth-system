@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-microsoft';
-import { MicrosoftOAuthUser } from 'src/common/interfaces/oauth-user';
+import { MicrosoftOAuthUser } from 'src/common/interfaces/oauth';
 import { config } from 'src/config/config';
 
 @Injectable()

@@ -8,16 +8,16 @@ import {
 } from '@nestjs/common';
 import { EMAIL_VERIFICATION_PATH } from 'src/common/constans/routes';
 import { VerifyEmailDto } from './dtos/verify';
-import { EmailVerificationService } from './email-verification.service';
+import { AccountVerificationService } from './account-verification.service';
 import { ResendEmailDto } from './dtos/resend';
 import { Response } from 'express';
 import { ServiceResponse } from 'src/common/interfaces/response';
 import { config } from 'src/config/config';
 
 @Controller(EMAIL_VERIFICATION_PATH)
-export class EmailVerificationController {
+export class AccountVerificationController {
   constructor(
-    private readonly emailVerificationService: EmailVerificationService,
+    private readonly accountVerificationService: AccountVerificationService,
   ) {}
 
   @Get('verify')
@@ -26,9 +26,7 @@ export class EmailVerificationController {
     @Res() res: Response,
   ): Promise<any> {
     const emailVerified: ServiceResponse =
-      await this.emailVerificationService.verifyEmail(token);
-
-    console.log(emailVerified);
+      await this.accountVerificationService.verifyEmail(token);
 
     const queryParams = !!emailVerified.success
       ? emailVerified.message
@@ -43,6 +41,6 @@ export class EmailVerificationController {
   async resend(
     @Query(new ValidationPipe()) { token }: ResendEmailDto,
   ): Promise<any> {
-    return this.emailVerificationService.resendVerificationLink(token);
+    return this.accountVerificationService.resendVerificationLink(token);
   }
 }

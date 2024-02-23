@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, Profile } from 'passport-github';
-import { GithubOAuthUser } from 'src/common/interfaces/oauth-user';
+import { GithubOAuthUser } from 'src/common/interfaces/oauth';
 import { getGithubPublicEmail } from 'src/common/utils/get-github-email';
 import { config } from 'src/config/config';
 

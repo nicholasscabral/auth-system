@@ -1,20 +1,15 @@
-type OAuthStrategyOptions = {
-  clientID: string;
-  clientSecret: string;
-  callbackURL: string;
-  scope: string[];
-};
-
-interface GoogleOAuthStrategyOptions extends OAuthStrategyOptions {}
-interface GithubOAuthStrategyOptions extends OAuthStrategyOptions {}
-interface MicrosoftOAuthStrategyOptions extends OAuthStrategyOptions {}
+import {
+  GoogleOAuthStrategyOptions,
+  GithubOAuthStrategyOptions,
+  MicrosoftOAuthStrategyOptions,
+} from './oauth';
 
 export interface IConfig {
   clientUrl: string;
   env: string;
   databaseUrl: string;
   jwtSecret: string;
-  verifyEmailRedirectUrl: string;
+  accountVerificationCallbackUrl: string;
   oauth: {
     google: GoogleOAuthStrategyOptions;
     github: GithubOAuthStrategyOptions;

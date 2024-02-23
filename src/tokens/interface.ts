@@ -13,6 +13,6 @@ export interface IRefreshTokenService extends ITokenService {
   upsert(token: string, userId: number): Promise<any>;
 }
 
-export interface IVerificationEmailTokenService extends ITokenService {}
+export interface IAccountVerificationTokenService extends ITokenService {}
 
 export interface IResetPasswordTokenService extends ITokenService {}

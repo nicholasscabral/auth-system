@@ -1,11 +1,11 @@
 import { IConfig } from 'src/common/interfaces/config';
 
 export const config: IConfig = {
-  clientUrl: process.env.CLIENT_URL,
   env: process.env.NODE_ENV,
+  clientUrl: process.env.CLIENT_URL,
   databaseUrl: process.env.DATABASE_URL,
   jwtSecret: process.env.JWT_SECRET,
-  verifyEmailRedirectUrl: process.env.VERIFY_EMAIL_REDIRECT_URL,
+  accountVerificationCallbackUrl: process.env.ACCOUNT_VERIFICATION_CALLBACK_URL,
   oauth: {
     google: {
       clientID: process.env.GOOGLE_CLIENT_ID,

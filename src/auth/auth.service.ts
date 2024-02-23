@@ -4,7 +4,7 @@ import {
   GithubOAuthUser,
   GoogleOAuthUser,
   MicrosoftOAuthUser,
-} from 'src/common/interfaces/oauth-user';
+} from 'src/common/interfaces/oauth';
 import { UsersService } from 'src/users/users.service';
 import { PasswordService } from 'src/utils-services/password.service';
 import { LoginResponseDto } from './dtos/login-response';

@@ -18,7 +18,7 @@ import {
   GithubOAuthUser,
   GoogleOAuthUser,
   MicrosoftOAuthUser,
-} from 'src/common/interfaces/oauth-user';
+} from 'src/common/interfaces/oauth';
 import { User } from 'src/common/entities';
 import { TokenPayload } from 'src/common/interfaces/token';
 import { RefreshTokenGuard } from './guards/refresh-token.guard';

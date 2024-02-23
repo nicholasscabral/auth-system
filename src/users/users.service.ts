@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create.dto';
 import { PrismaService } from 'src/providers/database/prisma.service';
-import { EmailVerificationService } from 'src/email-verification/email-verification.service';
+import { AccountVerificationService } from 'src/account-verification/account-verification.service';
 import { PasswordService } from 'src/utils-services/password.service';
-import { OAuthUser } from 'src/common/interfaces/oauth-user';
+import { OAuthUser } from 'src/common/interfaces/oauth';
 import { User } from 'src/common/entities';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class UsersService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly passwordService: PasswordService,
-    private readonly emailVerificationService: EmailVerificationService,
+    private readonly accountVerificationService: AccountVerificationService,
   ) {}
 
   async create({ email, password }: CreateUserDto): Promise<void> {
@@ -29,7 +29,7 @@ export class UsersService {
       data: { email: email, hash, salt },
     });
 
-    this.emailVerificationService.sendVerificationLink(user.email);
+    this.accountVerificationService.init(user.email);
   }
 
   async findByEmail(email: string): Promise<any> {

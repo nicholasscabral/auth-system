@@ -1,5 +1,16 @@
 import { User } from '../entities';
 
+type OAuthStrategyOptions = {
+  clientID: string;
+  clientSecret: string;
+  callbackURL: string;
+  scope: string[];
+};
+
+export interface GoogleOAuthStrategyOptions extends OAuthStrategyOptions {}
+export interface GithubOAuthStrategyOptions extends OAuthStrategyOptions {}
+export interface MicrosoftOAuthStrategyOptions extends OAuthStrategyOptions {}
+
 export type GoogleOAuthUser = {
   sub: string;
   email: string;
