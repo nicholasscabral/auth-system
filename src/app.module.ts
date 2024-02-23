@@ -9,6 +9,7 @@ import { config } from './config/config';
 import { EmailVerificationModule } from './email-verification/email-verification.module';
 import { UtilsServicesModule } from './utils-services/utils-services.module';
 import { AuthModule } from './auth/auth.module';
+import { TokensModule } from './tokens/tokens.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AuthModule } from './auth/auth.module';
     EmailVerificationModule,
     UtilsServicesModule,
     AuthModule,
+    TokensModule,
   ],
   controllers: [AppController],
   providers: [AppService],

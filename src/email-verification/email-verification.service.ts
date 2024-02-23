@@ -1,23 +1,25 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { TokenService } from '../utils-services/token.service';
+import { TokenService } from '../tokens/token.service';
 import { config } from 'src/config/config';
 import { MailerService } from '@nestjs-modules/mailer';
 import { LoggerService } from 'src/utils-services/logger.service';
 import { PrismaService } from 'src/providers/database/prisma.service';
 import { VerifyEmailToken } from 'src/common/interfaces/verify-email-token';
 import { ServiceResponse } from 'src/common/interfaces/response';
+import { VerificationEmailTokenService } from 'src/tokens/verification-email-token.service';
 
 @Injectable()
 export class EmailVerificationService {
   constructor(
     private readonly mailer: MailerService,
     private readonly tokenService: TokenService,
+    private readonly verificaitonEmailTokenService: VerificationEmailTokenService,
     private readonly logger: LoggerService,
     private readonly prisma: PrismaService,
   ) {}
 
   async verifyEmail(token: string): Promise<ServiceResponse> {
-    const decodedToken: VerifyEmailToken = this.tokenService.verifyToken(
+    const decodedToken: VerifyEmailToken = this.tokenService.verify(
       token,
     ) as VerifyEmailToken;
 
@@ -47,7 +49,7 @@ export class EmailVerificationService {
   }
 
   async resendVerificationLink(token: string): Promise<void> {
-    const decodedToken: VerifyEmailToken = this.tokenService.verifyToken(
+    const decodedToken: VerifyEmailToken = this.tokenService.verify(
       token,
       true,
     );
@@ -58,7 +60,7 @@ export class EmailVerificationService {
   }
 
   async sendVerificationLink(email: string): Promise<void> {
-    const token: string = this.tokenService.generateVerificationEmailToken({
+    const token: string = this.verificaitonEmailTokenService.generate({
       email,
       sub: 1,
     });

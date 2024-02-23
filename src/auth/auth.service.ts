@@ -7,17 +7,19 @@ import {
 } from 'src/common/interfaces/oauth-user';
 import { UsersService } from 'src/users/users.service';
 import { PasswordService } from 'src/utils-services/password.service';
-import { TokenService } from 'src/utils-services/token.service';
 import { LoginResponseDto } from './dtos/login-response';
 import { TokenPayload } from 'src/common/interfaces/token';
 import { Tokens } from 'src/common/interfaces/token';
+import { RefreshTokenService } from 'src/tokens/refresh-token.service';
+import { AccessTokenService } from 'src/tokens/access-token.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly passwordService: PasswordService,
     private readonly userService: UsersService,
-    private readonly tokenService: TokenService,
+    private readonly accessTokenService: AccessTokenService,
+    private readonly refreshTokenService: RefreshTokenService,
   ) {}
 
   async login({ email, id }: User): Promise<LoginResponseDto> {
@@ -25,7 +27,7 @@ export class AuthService {
 
     const tokens: Tokens = this.getTokens(payload);
 
-    await this.tokenService.upsertRefreshToken(tokens.refreshToken, id);
+    await this.refreshTokenService.upsert(tokens.refreshToken, id);
 
     return tokens;
   }
@@ -66,19 +68,15 @@ export class AuthService {
   async refresh(payload: TokenPayload): Promise<any> {
     const tokens: Tokens = this.getTokens(payload);
 
-    await this.tokenService.upsertRefreshToken(
-      tokens.refreshToken,
-      payload.sub,
-    );
+    await this.refreshTokenService.upsert(tokens.refreshToken, payload.sub);
 
     return tokens;
   }
 
   getTokens(payload: TokenPayload): Tokens {
-    console.log({ payload });
-    const accessToken: string = this.tokenService.generateAccessToken(payload);
-    const refreshToken: string =
-      this.tokenService.generateRefreshToken(payload);
-    return { accessToken, refreshToken };
+    return {
+      accessToken: this.accessTokenService.generate(payload),
+      refreshToken: this.refreshTokenService.generate(payload),
+    };
   }
 }

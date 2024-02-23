@@ -11,9 +11,10 @@ import { UsersService } from 'src/users/users.service';
 import { LocalStrategy } from './strategies/local.strategy';
 import { AccessTokenStrategy } from './strategies/access-token.strategy';
 import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
+import { TokensModule } from 'src/tokens/tokens.module';
 
 @Module({
-  imports: [PassportModule, UsersModule],
+  imports: [PassportModule, UsersModule, TokensModule],
   controllers: [AuthController],
   providers: [
     AuthService,

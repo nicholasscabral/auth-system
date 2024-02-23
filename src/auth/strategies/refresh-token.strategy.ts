@@ -4,14 +4,14 @@ import { Request } from 'express';
 import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt';
 import { TokenPayload } from 'src/common/interfaces/token';
 import { config } from 'src/config/config';
-import { TokenService } from 'src/utils-services/token.service';
+import { RefreshTokenService } from 'src/tokens/refresh-token.service';
 
 @Injectable()
 export class RefreshTokenStrategy extends PassportStrategy(
   Strategy,
   'jwt-refresh',
 ) {
-  constructor(private readonly tokenService: TokenService) {
+  constructor(private readonly refreshTokenService: RefreshTokenService) {
     super({
       secretOrKey: config.jwtSecret,
       jwtFromRequest: ExtractJwt.fromBodyField('refreshToken'),
@@ -29,7 +29,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
       throw new ForbiddenException('Refresh token not provided');
     }
 
-    const tokenIsValid: boolean = await this.tokenService.validateRefreshToken(
+    const tokenIsValid: boolean = await this.refreshTokenService.validate(
       refreshToken,
     );
 
