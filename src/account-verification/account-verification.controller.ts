@@ -34,7 +34,9 @@ export class AccountVerificationController {
         : ''
       : `?error=true&message=${emailVerified.message}&token=${token}`;
 
-    return res.redirect(`${config.clientUrl}/email-verification${queryParams}`);
+    return res.redirect(
+      `${config.clientUrl}/account-verification${queryParams}`,
+    );
   }
 
   @Post('resend')

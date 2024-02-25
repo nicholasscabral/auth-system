@@ -2,6 +2,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
 import { config } from 'src/config/config';
 import { AccountVerificationEmailService } from './account-verification-email.service';
+import { ResetPasswordEmailService } from './reset-password-email.service';
 
 @Module({
   imports: [
@@ -9,7 +10,7 @@ import { AccountVerificationEmailService } from './account-verification-email.se
       transport: config.mailer,
     }),
   ],
-  providers: [AccountVerificationEmailService],
-  exports: [AccountVerificationEmailService],
+  providers: [AccountVerificationEmailService, ResetPasswordEmailService],
+  exports: [AccountVerificationEmailService, ResetPasswordEmailService],
 })
 export class EmailModule {}

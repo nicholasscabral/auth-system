@@ -6,6 +6,7 @@ import { PrismaService } from 'src/providers/database/prisma.service';
 import { JwtModule } from '@nestjs/jwt';
 import { config } from 'src/config/config';
 import { AccountVerificationTokenService } from './account-verification-token.service';
+import { ResetPasswordTokenService } from './reset-password-token.service';
 
 @Module({
   imports: [JwtModule.register({ secret: config.jwtSecret })],
@@ -14,6 +15,7 @@ import { AccountVerificationTokenService } from './account-verification-token.se
     TokenService,
     AccessTokenService,
     RefreshTokenService,
+    ResetPasswordTokenService,
     AccountVerificationTokenService,
   ],
   exports: [
@@ -21,6 +23,7 @@ import { AccountVerificationTokenService } from './account-verification-token.se
     TokenService,
     AccessTokenService,
     RefreshTokenService,
+    ResetPasswordTokenService,
     AccountVerificationTokenService,
   ],
 })

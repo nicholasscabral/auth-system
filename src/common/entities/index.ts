@@ -14,6 +14,7 @@ export interface User {
   createdAt: string | Date;
   updatedAt: string | Date;
   refreshTokens?: RefreshToken[];
+  resetPasswordTokens?: ResetPasswordToken[];
 }
 
 export interface RefreshToken {

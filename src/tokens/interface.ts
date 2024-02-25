@@ -1,10 +1,11 @@
 import { TokenExpiryByType } from 'src/common/enums';
+import { TokenPayload } from 'src/common/interfaces/token';
 
 export interface ITokenService {
   generate(payload: any, expiresIn: TokenExpiryByType): string;
   decode?(token: string): any;
   verify?(token: string): any;
-  validate?(token: string): Promise<boolean>;
+  validate?(token: string): Promise<TokenPayload>;
 }
 
 export interface IAccessTokenService extends ITokenService {}

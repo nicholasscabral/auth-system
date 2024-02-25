@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 import { RefreshToken } from 'src/common/entities';
 import { TokenExpiryByType } from 'src/common/enums';
 import { TokenPayload } from 'src/common/interfaces/token';
@@ -31,16 +31,18 @@ export class RefreshTokenService implements IRefreshTokenService {
     });
   }
 
-  async validate(token: string): Promise<boolean> {
+  async validate(token: string): Promise<TokenPayload> {
     const refreshToken: RefreshToken =
       (await this.prisma.refreshTokens.findFirst({
         where: { token },
       })) as RefreshToken;
 
-    if (!refreshToken) return false;
+    if (!refreshToken) return null;
 
-    const isValid: TokenPayload = this.tokenService.verify(refreshToken.token);
+    const verifiedToken: TokenPayload = this.tokenService.verify(
+      refreshToken.token,
+    );
 
-    return !!isValid;
+    return verifiedToken;
   }
 }

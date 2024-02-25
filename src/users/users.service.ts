@@ -5,6 +5,7 @@ import { AccountVerificationService } from 'src/account-verification/account-ver
 import { PasswordService } from 'src/utils-services/password.service';
 import { OAuthUser } from 'src/common/interfaces/oauth';
 import { User } from 'src/common/entities';
+import { HashAndSalt } from 'src/common/interfaces/password';
 
 @Injectable()
 export class UsersService {
@@ -45,5 +46,15 @@ export class UsersService {
 
     return (userAlreadyExists ||
       this.prisma.users.create({ data: { email } })) as User;
+  }
+
+  async changePassword(
+    email: string,
+    { hash, salt }: HashAndSalt,
+  ): Promise<void> {
+    await this.prisma.users.update({
+      where: { email },
+      data: { hash, salt },
+    });
   }
 }

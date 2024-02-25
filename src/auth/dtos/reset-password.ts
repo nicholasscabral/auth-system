@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsJWT, IsNotEmpty } from 'class-validator';
 import { Match } from 'src/common/decorators/match.decorator';
 
 export class ResetPasswordDto {
@@ -8,4 +8,10 @@ export class ResetPasswordDto {
   @IsNotEmpty()
   @Match('password', { message: 'Password should match' })
   passwordConfirm: string;
+}
+
+export class ResetPasswordTokenDto {
+  @IsNotEmpty()
+  @IsJWT({ always: true })
+  token: string;
 }

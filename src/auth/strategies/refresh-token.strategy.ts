@@ -29,7 +29,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
       throw new ForbiddenException('Refresh token not provided');
     }
 
-    const tokenIsValid: boolean = await this.refreshTokenService.validate(
+    const tokenIsValid: TokenPayload = await this.refreshTokenService.validate(
       refreshToken,
     );
 

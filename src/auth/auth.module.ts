@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { PassportModule } from '@nestjs/passport';
@@ -12,6 +12,7 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { AccessTokenStrategy } from './strategies/access-token.strategy';
 import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
 import { TokensModule } from 'src/tokens/tokens.module';
+import { ResetPasswordTokenMiddleware } from './middlewares/reset-password-token.middleware';
 
 @Module({
   imports: [PassportModule, UsersModule, TokensModule],
@@ -28,4 +29,14 @@ import { TokensModule } from 'src/tokens/tokens.module';
     UsersService,
   ],
 })
-export class AuthModule {}
+export class AuthModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    console.log('configurind middleareeeeeee');
+    consumer
+      .apply(ResetPasswordTokenMiddleware)
+      .forRoutes(
+        'auth/forgot-password/callback/:token',
+        'auth/reset-password/:token',
+      );
+  }
+}

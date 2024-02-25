@@ -5,7 +5,6 @@ export const config: IConfig = {
   clientUrl: process.env.CLIENT_URL,
   databaseUrl: process.env.DATABASE_URL,
   jwtSecret: process.env.JWT_SECRET,
-  accountVerificationCallbackUrl: process.env.ACCOUNT_VERIFICATION_CALLBACK_URL,
   oauth: {
     google: {
       clientID: process.env.GOOGLE_CLIENT_ID,
@@ -36,5 +35,13 @@ export const config: IConfig = {
       user: process.env.MAILER_USER,
       pass: process.env.MAILER_PASS,
     },
+  },
+  callbacks: {
+    resetPassword: process.env.RESET_PASSWORD_CALLBACK_URL,
+    accountVerification: process.env.ACCOUNT_VERIFICATION_CALLBACK_URL,
+  },
+  clientRedirects: {
+    resetPassword: process.env.RESET_PASSWORD_CLIENT_REDIRECT_URL,
+    accountVerification: process.env.ACCOUNT_VERIFICATION_CLIENT_REDIRECT_URL,
   },
 };

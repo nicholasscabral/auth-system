@@ -57,7 +57,7 @@ export class AccountVerificationService {
       email,
       sub: 1,
     });
-    const verificationLink: string = `${config.accountVerificationCallbackUrl}?token=${token}`;
+    const verificationLink: string = `${config.clientRedirects.accountVerification}?token=${token}`;
     await this.accountVerificationEmailService.send(email, verificationLink);
   }
 

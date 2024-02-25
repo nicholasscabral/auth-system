@@ -7,6 +7,7 @@ import {
   Body,
   ValidationPipe,
   Res,
+  Param,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
@@ -22,13 +23,17 @@ import {
 import { User } from 'src/common/entities';
 import { TokenPayload } from 'src/common/interfaces/token';
 import { RefreshTokenGuard } from './guards/refresh-token.guard';
-import { ResetPasswordDto } from './dtos/reset-password';
-import { ResetPasswordTokenGuard } from './guards/reset-password-token.guard';
+import { ResetPasswordDto, ResetPasswordTokenDto } from './dtos/reset-password';
 import { ForgotPasswordDto } from './dtos/forgot-password';
+import { ResetPasswordService } from 'src/utils-services/reset-password.service';
+import { GetUser } from 'src/common/decorators/get-user.decorator';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly resetPasswordService: ResetPasswordService,
+  ) {}
 
   @Post('login')
   @UseGuards(LocalAuthGuard)
@@ -73,24 +78,29 @@ export class AuthController {
   }
 
   @Post('forgot-password')
-  async forgotPassword(@Body(new ValidationPipe()) body: ForgotPasswordDto) {
-    console.log({ body });
+  async forgotPassword(
+    @Body(new ValidationPipe()) { email }: ForgotPasswordDto,
+  ) {
     // send reset password email
+    return this.resetPasswordService.forgot(email);
   }
 
   @Get('forgot-password/callback/:token')
-  @UseGuards(ResetPasswordTokenGuard)
-  async forgotPasswordCallback(@Res() res: Response) {
-    return res.redirect(''); // reset password page
+  async forgotPasswordCallback(
+    @Param() { token }: ResetPasswordTokenDto,
+    @Res() res: Response,
+  ) {
+    // redirect to reset password page
+    const redirectUrl: string = this.resetPasswordService.forgotCallback(token);
+    console.log({ redirectUrl });
+    res.redirect(redirectUrl);
   }
 
   @Post('reset-password/:token')
-  @UseGuards(ResetPasswordTokenGuard)
   async resetPassword(
-    @Body(new ValidationPipe()) body: ResetPasswordDto,
-    @Req() req: Request,
+    @Body(new ValidationPipe()) { password }: ResetPasswordDto,
+    @GetUser() user: User,
   ) {
-    console.log({ body, req });
-    // reset password
+    return this.resetPasswordService.reset(user.email, password);
   }
 }

@@ -9,7 +9,14 @@ export interface IConfig {
   env: string;
   databaseUrl: string;
   jwtSecret: string;
-  accountVerificationCallbackUrl: string;
+  callbacks: {
+    resetPassword: string;
+    accountVerification: string;
+  };
+  clientRedirects: {
+    resetPassword: string;
+    accountVerification: string;
+  };
   oauth: {
     google: GoogleOAuthStrategyOptions;
     github: GithubOAuthStrategyOptions;
