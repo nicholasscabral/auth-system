@@ -12,6 +12,6 @@ export class ResetPasswordDto {
 
 export class ResetPasswordTokenDto {
   @IsNotEmpty()
-  @IsJWT({ always: true })
+  @IsJWT()
   token: string;
 }

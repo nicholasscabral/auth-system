@@ -11,7 +11,6 @@ import { VerifyEmailDto } from './dtos/verify';
 import { AccountVerificationService } from './account-verification.service';
 import { ResendEmailDto } from './dtos/resend';
 import { Response } from 'express';
-import { ServiceResponse } from 'src/common/interfaces/response';
 import { config } from 'src/config/config';
 
 @Controller(EMAIL_VERIFICATION_PATH)
@@ -25,8 +24,9 @@ export class AccountVerificationController {
     @Query(new ValidationPipe()) { token }: VerifyEmailDto,
     @Res() res: Response,
   ): Promise<any> {
-    const emailVerified: ServiceResponse =
-      await this.accountVerificationService.verifyEmail(token);
+    const emailVerified = await this.accountVerificationService.verifyEmail(
+      token,
+    );
 
     const queryParams = !!emailVerified.success
       ? emailVerified.message

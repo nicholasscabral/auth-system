@@ -20,7 +20,6 @@ export const createMiddlewareFactory = (
 ) => {
   return async (req: Request, _: Response, next: NextFunction) => {
     const token: string = req.params.token;
-    console.log('MIDDLEWARE', { token });
 
     if (!token) {
       throw new ForbiddenException('Invalid token');

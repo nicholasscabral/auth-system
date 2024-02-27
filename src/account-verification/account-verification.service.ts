@@ -2,7 +2,6 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { config } from 'src/config/config';
 import { PrismaService } from 'src/providers/database/prisma.service';
 import { VerifyEmailToken } from 'src/common/interfaces/verify-email-token';
-import { ServiceResponse } from 'src/common/interfaces/response';
 import { AccountVerificationEmailService } from 'src/email/account-verification-email.service';
 import { AccountVerificationTokenService } from 'src/tokens/account-verification-token.service';
 
@@ -14,7 +13,7 @@ export class AccountVerificationService {
     private readonly accountVerificationEmailService: AccountVerificationEmailService,
   ) {}
 
-  async verifyEmail(token: string): Promise<ServiceResponse> {
+  async verifyEmail(token: string) {
     const decodedToken: VerifyEmailToken =
       this.accountVerificationTokenService.verify(token);
 

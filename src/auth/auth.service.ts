@@ -7,7 +7,6 @@ import {
 } from 'src/common/interfaces/oauth';
 import { UsersService } from 'src/users/users.service';
 import { PasswordService } from 'src/utils-services/password.service';
-import { LoginResponseDto } from './dtos/login-response';
 import { TokenPayload } from 'src/common/interfaces/token';
 import { Tokens } from 'src/common/interfaces/token';
 import { RefreshTokenService } from 'src/tokens/refresh-token.service';
@@ -22,7 +21,7 @@ export class AuthService {
     private readonly refreshTokenService: RefreshTokenService,
   ) {}
 
-  async login({ email, id }: User): Promise<LoginResponseDto> {
+  async login({ email, id }: User) {
     const payload: TokenPayload = { sub: id, email };
 
     const tokens: Tokens = this.getTokens(payload);

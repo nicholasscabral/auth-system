@@ -31,7 +31,6 @@ import { ResetPasswordTokenMiddleware } from './middlewares/reset-password-token
 })
 export class AuthModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    console.log('configurind middleareeeeeee');
     consumer
       .apply(ResetPasswordTokenMiddleware)
       .forRoutes(
